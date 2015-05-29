@@ -11,19 +11,21 @@ function PricingSystem() {
 }
 
 PricingSystem.prototype.command = function(input) {
-	var basePriceCommand = /\$\d*\.?\d*/;
+	var basePriceCommand = /\$(\d*\.?\d*)/;
 	var peopleCommand = /(\d+)\s(person|people)/i;
 
+	var basePriceTest = basePriceCommand.exec(input);
 	var peopleTest = peopleCommand.exec(input);
 
-	if(basePriceCommand.test(input) && this.basePricePlusFlat === 0) {
-		this.basePricePlusFlat = input.substring(1) * (1 + this.flatMarkup);
+	if(basePriceTest !== null && basePriceTest[0] == basePriceTest.input && this.basePricePlusFlat === 0) {
+		this.basePricePlusFlat = basePriceTest[1] * (1 + this.flatMarkup);
 		this.markedUpPrice = this.basePricePlusFlat;
 	}
 	else if(peopleTest !== null && peopleTest[0] == peopleTest.input) {
 		this.markedUpPrice += this.basePricePlusFlat * (peopleTest[1] * this.personMarkup);
 	}
 	else if(typeof this.materialMarkups[input] !== 'undefined') {
+		console.log("markup of "+this.materialMarkups[input]);
 		this.markedUpPrice += this.basePricePlusFlat * this.materialMarkups[input];
 	}
 };

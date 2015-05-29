@@ -26,4 +26,23 @@ describe("Pricing system tests", function() {
     expect(system.finalPrice()).toEqual("$13707.63");
   });
 
+  it("should add a 2% markup for electonics", function() {
+    system.command("$100.00");
+    system.command("electronics");
+    expect(system.finalPrice()).toEqual("$107.10");
+  });
+
+  it("should add a 5% base markup for all jobs", function() {
+    system.command("$100.00");
+    expect(system.finalPrice()).toEqual("$105.00");
+  });
+
+  it("should support jobs with multiple materials", function() {
+    system.command("$267.44");
+    system.command("drugs");
+    system.command("food");
+    system.command("electronics");
+    expect(system.finalPrice()).toEqual("$343.99");
+  });
+
 });
